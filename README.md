@@ -38,6 +38,56 @@ class FindImageFromURLTestCase(HaulBaseTestCase):
 
 
 
+
+
+
+
+
+class CustomFinderPipelineTestCase(HaulBaseTestCase):
+
+  def setUp(self):
+    super(CustomFinderPipelineTestCase, self).setUp()
+    
+  def test_find_html_document(self):
+    from haul.compat import str
+    
+    def img_data_src_finder(pipeline_index,
+        soup,
+        finder_image_urls=[],
+        *args, **kwargs):
+      
+      now_finder_image_urls = []
+      
+      for img in soup.find_all('img'):
+        src = img.get('data-src', None)
+        if src:
+          src = str(src)
+          now_finder_image_urls.append(src)
+          
+      output = {}
+      output['finder_image_urls'] = finder_image_urls + now_finder_image_urls
+      
+      return output
+      
+    FINDER_PIPELINE = (
+      'haul.finders.pipeline.html.img_src_finder',
+      'haul.finders.pipeline.html.a_href_finder',
+      'haul.finders.pipeline.css.background_image_finder',
+      img_data_src_finder,
+    )
+    
+    h = Haul(finder_pipeline=FINDER_PIPELINE)
+    hr = h.find_images(self.complete_html)
+    
+    self.assertIsInstance(hr, HaulResult)
+    
+    test_image_url = 'http://files.heelsfetishism./media/heels/2013/10/03/18099_307xxx.jpg'
+    self.assertIn(test_image_url, hr.finder_image_urls)
+    
+   image_urls = hr.image_urls
+   image_urls_count = len(image_urls)
+   self.assertEqual(image_urls_count, 7)
+
 class ExceptionsTestCase(HaulBaseTestCase):
   
   def setUp(self):

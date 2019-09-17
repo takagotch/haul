@@ -38,9 +38,35 @@ class FindImageFromURLTestCase(HaulBaseTestCase):
 
 
 
+class ExceptionsTestCase(HaulBaseTestCase):
+  
+  def setUp(self):
+    super(ExceptionsTestCase, self).setUp()
+  
+  def test_invalid_parameter_error(self):
+    h = Haul()
+    
+    with self.assertRaises(exceptions.InvalidParameterError):
+      url_or_html = None
+      h.find_images(url_or_html)
+      
+  def test_retrieve_error(self):
+    h = Haul()
+    
+    with self.assertRaises(exceptions.RetrieveError):
+      h.find_images(self.not_exist_url)
+      
+    with self.assertRaises(exceptions.RetrieveError):
+      h.find_images(self.broken_url)
+      
+  def test_content_type_not_supported(self):
+    h = Haul()
+    
+    with self.assertRaises(exceptions.ContentTypeNotSupported):
+      h.find_images(self.not_supported_url)
 
-
-
+if __name__ == '__main__':
+  unittest.main()
 ```
 
 ```

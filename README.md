@@ -97,7 +97,7 @@ class FindImageFromURLTestCase(HaulBaseTestCase):
     hr = h.find_images(self.fancy_url)
     
     self.assertIsInstance(hr, HaulResult)
-    self.asertIn('text/html', hr.content_type)
+    self.assertIn('text/html', hr.content_type)
   
   def test_find_image_url(self):
     h = Haul()
@@ -116,7 +116,7 @@ class ExtenderPipelineTestCase(HaulBaseTestCase):
     hr = h.find_image(self.blogspot_html, extend=True)
     
     self.assertIsInstance(hr, HaulResult)
-    self.asertIn('text/html', hr.content_type)
+    self.assertIn('text/html', hr.content_type)
 
   def test_tumblr(self):
     h = Haul()
@@ -129,8 +129,8 @@ class ExtenderPipelineTestCase(HaulBaseTestCase):
     h = Haul()
     hr = h.find_images(self.pinterest_image_url, extent=True)
     
-    self.asertIsInstance(hr, HaulResult)
-    self.asertIn('image/', hr.content_type)
+    self.assertIsInstance(hr, HaulResult)
+    self.assertIn('image/', hr.content_type)
     
     image_urls = hr.image_urls
     image_urls_count = len(image_urls)
@@ -152,7 +152,7 @@ class ExtenderPipelineTestCase(HaulBaseTestCase):
     hr = h.find_images(self.wordpress_html, extend=True)
     
     self.assertIsInstance(hr, HaulResult)
-    self.asertIn('text/html', hr.content_type)
+    self.assertIn('text/html', hr.content_type)
 
 class CustomFinderPipelineTestCase(HaulBaseTestCase):
 
